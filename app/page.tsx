@@ -1,51 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-const projects = [
-  {
-    number: "01",
-    label: "ENTRY / SCHEDULING",
-    title: "Ridenet Data Processor",
-    headline: "From export to an organised event in minutes.",
-    description:
-      "A local workflow that turns a downloaded Ridenet export into clearer entry data and a workable race schedule, without rebuilding the event by hand.",
-    status: "PROCESS / READY",
-    theme: "entry",
-    points: [
-      "Import and check the downloaded event export",
-      "Organise entries and classes into a useful workspace",
-      "Build and refine the race schedule locally",
-    ],
-    signals: [
-      ["INPUT", "RIDENET EXPORT"],
-      ["PROCESS", "LOCAL WORKSPACE"],
-      ["OUTPUT", "ENTRIES + SCHEDULE"],
-    ],
-    flow: ["EXPORT", "CHECK", "ORGANISE", "SCHEDULE"],
-  },
-  {
-    number: "02",
-    label: "LIVE / LOCAL",
-    title: "MYLAPS Local Timing",
-    headline: "Trackside timing screens without an internet dependency.",
-    description:
-      "A local timing display that brings MYLAPS race information to screens around the circuit using the trackside network, without requiring Speedhive access.",
-    status: "TIMING / LOCAL",
-    theme: "timing",
-    points: [
-      "Receive timing information on the local network",
-      "Serve a clear browser display to trackside screens",
-      "Keep the display useful when external internet is unavailable",
-    ],
-    signals: [
-      ["SOURCE", "MYLAPS TIMING"],
-      ["NETWORK", "TRACKSIDE LOCAL"],
-      ["DISPLAY", "BROWSER SCREENS"],
-    ],
-    flow: ["TIMING FEED", "LOCAL SERVER", "TRACK NETWORK", "SCREENS"],
-  },
-];
+import { siteContent } from "./site-content";
 
 function SignalBars() {
   return (
@@ -58,13 +14,47 @@ function SignalBars() {
   );
 }
 
-function TraceRow({ label, tone }: { label: string; tone: string }) {
+function BrandMark() {
   return (
-    <div className={"telemetry-trace " + tone} aria-hidden="true">
-      <span className="trace-badge">{label}</span>
-      <span className="wave-line">
-        <i />
-      </span>
+    <span className="brand-mark" aria-hidden="true">
+      <i />
+      <i />
+      <i />
+    </span>
+  );
+}
+
+function StatusLight() {
+  return <i className="status-light" aria-hidden="true" />;
+}
+
+function Gauge() {
+  return (
+    <div className="gauge" aria-hidden="true">
+      <div className="gauge-ring" />
+      <span className="gauge-needle" />
+      <span className="gauge-pin" />
+      <strong>FLOW</strong>
+      <small>ACTIVE</small>
+    </div>
+  );
+}
+
+function TraceField() {
+  return (
+    <div className="trace-field" aria-hidden="true">
+      <span className="trace trace-primary" />
+      <span className="trace trace-secondary" />
+      <span className="trace trace-tertiary" />
+      <i className="trace-axis" />
+    </div>
+  );
+}
+
+function MiniBars() {
+  return (
+    <div className="mini-bars" aria-hidden="true">
+      <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
     </div>
   );
 }
@@ -104,122 +94,103 @@ export default function Home() {
         aria-hidden="true"
       />
 
-      <section className="hero" aria-labelledby="hero-title">
-        <div className="hero-frame">
-          <div className="hero-editorial">
-            <header className="hero-masthead">
-              <a className="brand" href="#top" aria-label="Oompy Code Work home">
-                <span>OOMPY / CODE WORK</span>
-                <span className="brand-ticks" aria-hidden="true"><i /><i /><i /><i /></span>
-              </a>
+      <header className="site-header">
+        <a className="brand" href="#top" aria-label={siteContent.brand + " home"}>
+          <BrandMark />
+          <span>{siteContent.brand}</span>
+        </a>
 
-              <nav className={menuOpen ? "nav is-open" : "nav"} aria-label="Primary navigation">
-                <a href="#work" onClick={() => setMenuOpen(false)}>Work</a>
-                <a href="#approach" onClick={() => setMenuOpen(false)}>Approach</a>
-                <a href="#notes" onClick={() => setMenuOpen(false)}>Notes</a>
-              </nav>
-
-              <button
-                className="menu-button"
-                type="button"
-                aria-label="Toggle navigation"
-                aria-expanded={menuOpen}
-                onClick={() => setMenuOpen((open) => !open)}
-              >
-                <span />
-                <span />
-              </button>
-            </header>
-
-            <div className="hero-copy">
-              <p className="hero-context reveal-one">
-                INDEPENDENT / MOTORCYCLE OPERATIONS SOFTWARE
-              </p>
-              <h1 id="hero-title">
-                <span className="reveal-two">Small tools.</span>
-                <span className="accent-line reveal-three">Faster race days.</span>
-              </h1>
-            </div>
-
-            <a className="hero-project-line reveal-four" href="#work">
-              <span>RIDENET DATA PROCESSOR · MYLAPS LOCAL TIMING</span>
-              <i aria-hidden="true">↓</i>
+        <nav className={menuOpen ? "nav is-open" : "nav"} aria-label="Primary navigation">
+          {siteContent.nav.map((item) => (
+            <a href={item.href} key={item.href} onClick={() => setMenuOpen(false)}>
+              {item.label}
             </a>
+          ))}
+        </nav>
 
-            <span className="registration-mark mark-top" aria-hidden="true" />
-            <span className="registration-mark mark-bottom" aria-hidden="true" />
-          </div>
-
-          <aside className="telemetry-panel" aria-label="Illustrative local race system status">
-            <div className="panel-frame">
-              <div className="panel-topline">
-                <span>TRACKSIDE SYSTEM / LOCAL</span>
-                <SignalBars />
-              </div>
-
-              <div className="tachometer" aria-hidden="true">
-                <div className="tach-arc" />
-                <span className="tach-number n-zero">0</span>
-                <span className="tach-number n-four">4</span>
-                <span className="tach-number n-eight">8</span>
-                <span className="tach-number n-twelve">12</span>
-                <span className="tach-number n-sixteen">16</span>
-                <span className="tach-needle" />
-                <span className="tach-pin" />
-              </div>
-
-              <div className="status-lights" aria-hidden="true">
-                <i /><i /><i /><i /><i />
-              </div>
-
-              <div className="trace-stack">
-                <TraceRow label="T" tone="trace-a" />
-                <TraceRow label="↗" tone="trace-b" />
-                <TraceRow label="G" tone="trace-c" />
-              </div>
-
-              <div className="histogram" aria-hidden="true">
-                <span className="trace-badge">▤</span>
-                <div>
-                  <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
-                  <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
-                </div>
-              </div>
-
-              <div className="panel-footer">
-                <span>PROCESS / READY</span>
-                <span>DISPLAY / LOCAL</span>
-                <span className="active">NETWORK / INDEPENDENT</span>
-              </div>
-            </div>
-          </aside>
+        <div className="header-status">
+          <span>{siteContent.header.utility}</span>
+          <span className="ready"><StatusLight /> {siteContent.header.status}</span>
         </div>
+
+        <button
+          className="menu-button"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span />
+          <span />
+        </button>
+      </header>
+
+      <section className="hero" aria-labelledby="hero-title">
+        <div className="hero-copy">
+          <p className="eyebrow reveal-one">
+            <span aria-hidden="true" />
+            {siteContent.hero.eyebrow}
+          </p>
+          <h1 id="hero-title">
+            <span className="reveal-two">{siteContent.hero.lineOne}</span>
+            <span className="accent-line reveal-three">{siteContent.hero.lineTwo}</span>
+          </h1>
+          <p className="hero-intro reveal-four">{siteContent.hero.introduction}</p>
+          <a className="primary-cta reveal-four" href="#work">
+            {siteContent.hero.action}
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <aside className="hero-console" aria-label="Illustrative trackside system status">
+          <div className="console-shell">
+            <div className="console-header">
+              <span>LOCAL RACE SYSTEM / LIVE</span>
+              <SignalBars />
+            </div>
+
+            <div className="console-main">
+              <Gauge />
+              <dl className="console-readouts">
+                <div><dt>ENTRY PROCESS</dt><dd>READY</dd></div>
+                <div><dt>TIMING FEED</dt><dd>LOCAL</dd></div>
+                <div><dt>NETWORK</dt><dd>OFFLINE</dd></div>
+              </dl>
+            </div>
+
+            <MiniBars />
+
+            <div className="console-footer">
+              <span>RIDENET / PROCESS</span>
+              <span>MYLAPS / DISPLAY</span>
+              <span className="active">LOCAL-FIRST</span>
+            </div>
+          </div>
+        </aside>
       </section>
 
-      <div className="programme-strip" aria-label="Project characteristics">
-        <span>SESSION / 01</span>
-        <span>MOTORCYCLE OPERATIONS SOFTWARE</span>
-        <span className="green">LOCAL / OFFLINE</span>
-        <span>DATA / FAST</span>
-        <span>RACE DAY / READY</span>
+      <div className="system-strip" aria-label="Project characteristics">
+        {siteContent.systemStrip.map((item, index) => (
+          <span className={index === 2 ? "active" : ""} key={item}>{item}</span>
+        ))}
       </div>
 
       <section className="work-section" id="work" aria-labelledby="work-title">
         <header className="section-intro">
           <div>
-            <p className="section-kicker">SELECTED WORK / 2026</p>
-            <h2 id="work-title">Two problems,<br /><em>worked through.</em></h2>
+            <p className="section-kicker">{siteContent.workIntroduction.kicker}</p>
+            <h2 id="work-title">
+              {siteContent.workIntroduction.title}
+              <em>{siteContent.workIntroduction.accent}</em>
+            </h2>
           </div>
-          <p>
-            Practical tools shaped around real trackside friction. Each project
-            keeps the workflow close, understandable and useful under race-day pressure.
-          </p>
+          <p>{siteContent.workIntroduction.description}</p>
         </header>
 
-        <div className="project-register">
-          {projects.map((project) => (
-            <article className={"project-card " + project.theme} key={project.number}>
-              <div className="project-number" aria-hidden="true">{project.number}</div>
+        <div className="project-list">
+          {siteContent.projects.map((project) => (
+            <article className="project-card" key={project.number}>
+              <div className="project-number">{project.number}</div>
 
               <div className="project-copy">
                 <p className="project-label">{project.label}</p>
@@ -232,25 +203,23 @@ export default function Home() {
               </div>
 
               <div className="project-console" aria-label={project.title + " workflow summary"}>
-                <div className="console-head">
+                <div className="project-console-header">
                   <span>{project.status}</span>
-                  <span className="console-light"><i /> LIVE</span>
+                  <span className="live"><StatusLight /> LIVE</span>
                 </div>
-                <div className="console-grid">
-                  {project.signals.map(([label, value]) => (
-                    <div className="console-row" key={label}>
-                      <span>{label}</span>
-                      <strong>{value}</strong>
+
+                <div className="project-readouts">
+                  {project.readouts.map((readout) => (
+                    <div key={readout.label}>
+                      <span>{readout.label}</span>
+                      <strong>{readout.value}</strong>
                     </div>
                   ))}
                 </div>
-                <div className="console-visual" aria-hidden="true">
-                  <span className="trace trace-one" />
-                  <span className="trace trace-two" />
-                  <span className="trace trace-three" />
-                  <span className="console-axis" />
-                </div>
-                <div className="console-meta">
+
+                <TraceField />
+
+                <div className="project-console-footer">
                   <span>MODE / UTILITY</span>
                   <span>STATE / AVAILABLE</span>
                 </div>
@@ -270,54 +239,58 @@ export default function Home() {
       </section>
 
       <section className="approach-section" id="approach" aria-labelledby="approach-title">
-        <div className="approach-orbit" aria-hidden="true">
-          <i /><i /><i />
+        <div className="approach-dial" aria-hidden="true">
+          <i className="dial-outer" />
+          <i className="dial-middle" />
+          <i className="dial-inner" />
           <span>LOCAL</span>
         </div>
 
         <div className="approach-copy">
-          <p className="section-kicker">WHY THESE EXIST</p>
-          <h2 id="approach-title">Built from problems<br />experienced <em>at the circuit.</em></h2>
-          <p>
-            These are independent, problem-led experiments by a hobby AI-assisted
-            coder. AI helps explore and test ideas; the aim is simply to remove
-            avoidable work and make race days easier.
-          </p>
+          <p className="section-kicker">{siteContent.approach.kicker}</p>
+          <h2 id="approach-title">
+            {siteContent.approach.title}
+            <em>{siteContent.approach.accent}</em>
+          </h2>
+          <p>{siteContent.approach.description}</p>
         </div>
 
         <ol className="approach-steps">
-          <li><span>01</span><strong>EXPERIENCE</strong><p>Notice the repeated task or trackside limitation.</p></li>
-          <li><span>02</span><strong>SIMPLIFY</strong><p>Build the smallest useful local workflow around it.</p></li>
-          <li><span>03</span><strong>REFINE</strong><p>Use it in context, learn, and improve the practical details.</p></li>
+          {siteContent.approach.steps.map((step) => (
+            <li key={step.number}>
+              <span>{step.number}</span>
+              <strong>{step.title}</strong>
+              <p>{step.description}</p>
+            </li>
+          ))}
         </ol>
       </section>
 
       <section className="notes-section" id="notes" aria-labelledby="notes-title">
-        <p className="section-kicker">PUBLIC PROJECT NOTES</p>
-        <h2 id="notes-title">The work is the story.<br />Private data is not.</h2>
+        <div className="notes-heading">
+          <p className="section-kicker">{siteContent.notes.kicker}</p>
+          <h2 id="notes-title">{siteContent.notes.title}</h2>
+        </div>
         <div className="notes-grid">
-          <p>No customer information is shown or used to demonstrate these projects.</p>
-          <p>No personal profile is required—the focus stays on the problems and the tools.</p>
-          <p>Ridenet and MYLAPS are named only because the projects address workflows around those systems.</p>
+          {siteContent.notes.items.map((item, index) => (
+            <article key={item}>
+              <span>0{index + 1}</span>
+              <p>{item}</p>
+            </article>
+          ))}
         </div>
       </section>
 
       <footer>
         <a className="footer-brand" href="#top">
-          <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
-          OOMPY / CODE WORK
+          <BrandMark />
+          {siteContent.brand}
         </a>
-        <p>SMALL TOOLS <i>/</i> FASTER RACE DAYS</p>
+        <p>{siteContent.footer.statement}</p>
         <div className="footer-meta">
-          <span>INDEPENDENT</span>
-          <span>AI-ASSISTED</span>
-          <span>PROBLEM-LED</span>
-          <span>2026</span>
+          {siteContent.footer.tags.map((tag) => <span key={tag}>{tag}</span>)}
         </div>
-        <small>
-          Independent hobby projects. Ridenet and MYLAPS are referenced solely
-          to describe the workflows these tools are designed around.
-        </small>
+        <small>{siteContent.footer.disclaimer}</small>
       </footer>
     </main>
   );
