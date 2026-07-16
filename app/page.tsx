@@ -1,80 +1,114 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const projects = [
   {
-    index: "01",
-    label: "DATA SYSTEMS",
-    title: "Race intelligence, made legible.",
-    copy: "Messy event data becomes one calm operational view — built for speed, clarity, and the moments where accuracy matters.",
-    tags: ["DATA", "WORKFLOWS", "DESKTOP"],
-    tone: "lime",
+    number: "01",
+    label: "ENTRY / SCHEDULING",
+    title: "Ridenet Data Processor",
+    headline: "From export to an organised event in minutes.",
+    description:
+      "A local workflow that turns a downloaded Ridenet export into clearer entry data and a workable race schedule, without rebuilding the event by hand.",
+    status: "PROCESS / READY",
+    theme: "entry",
+    points: [
+      "Import and check the downloaded event export",
+      "Organise entries and classes into a useful workspace",
+      "Build and refine the race schedule locally",
+    ],
+    signals: [
+      ["INPUT", "RIDENET EXPORT"],
+      ["PROCESS", "LOCAL WORKSPACE"],
+      ["OUTPUT", "ENTRIES + SCHEDULE"],
+    ],
+    flow: ["EXPORT", "CHECK", "ORGANISE", "SCHEDULE"],
   },
   {
-    index: "02",
-    label: "LOCAL PLATFORMS",
-    title: "Real-time tools that stay close.",
-    copy: "Local-first services connect timing hardware, live feeds, and people without turning the day into a cloud dependency.",
-    tags: ["REAL-TIME", "LOCAL-FIRST", "RESILIENT"],
-    tone: "violet",
-  },
-  {
-    index: "03",
-    label: "INTERACTIVE PRODUCTS",
-    title: "Complex work, simple surfaces.",
-    copy: "Thoughtful interfaces make technical systems feel direct: fewer steps, clearer states, and feedback that arrives at the right time.",
-    tags: ["UX", "AUTOMATION", "TOOLS"],
-    tone: "coral",
+    number: "02",
+    label: "LIVE / LOCAL",
+    title: "MYLAPS Local Timing",
+    headline: "Trackside timing screens without an internet dependency.",
+    description:
+      "A local timing display that brings MYLAPS race information to screens around the circuit using the trackside network, without requiring Speedhive access.",
+    status: "TIMING / LOCAL",
+    theme: "timing",
+    points: [
+      "Receive timing information on the local network",
+      "Serve a clear browser display to trackside screens",
+      "Keep the display useful when external internet is unavailable",
+    ],
+    signals: [
+      ["SOURCE", "MYLAPS TIMING"],
+      ["NETWORK", "TRACKSIDE LOCAL"],
+      ["DISPLAY", "BROWSER SCREENS"],
+    ],
+    flow: ["TIMING FEED", "LOCAL SERVER", "TRACK NETWORK", "SCREENS"],
   },
 ];
 
-function Arrow() {
-  return <span aria-hidden="true">↗</span>;
+function SignalBars() {
+  return (
+    <span className="signal-bars" aria-hidden="true">
+      <i />
+      <i />
+      <i />
+      <i />
+    </span>
+  );
 }
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [progress, setProgress] = useState(0);
-  const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const root = document.documentElement;
 
-    const onPointerMove = (event: PointerEvent) => {
-      root.style.setProperty("--mx", `${event.clientX / window.innerWidth - 0.5}`);
-      root.style.setProperty("--my", `${event.clientY / window.innerHeight - 0.5}`);
+    const handlePointer = (event: PointerEvent) => {
+      root.style.setProperty("--mx", String(event.clientX / window.innerWidth - 0.5));
+      root.style.setProperty("--my", String(event.clientY / window.innerHeight - 0.5));
     };
 
-    const onScroll = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? window.scrollY / max : 0);
+    const handleScroll = () => {
+      const available = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(available > 0 ? window.scrollY / available : 0);
     };
 
-    window.addEventListener("pointermove", onPointerMove, { passive: true });
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
+    window.addEventListener("pointermove", handlePointer, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
 
     return () => {
-      window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pointermove", handlePointer);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   return (
-    <main ref={mainRef}>
-      <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
+    <main id="top">
+      <div
+        className="scroll-progress"
+        style={{ transform: "scaleX(" + progress + ")" }}
+        aria-hidden="true"
+      />
 
       <header className="site-header">
-        <a className="wordmark" href="#top" aria-label="Oompy home">
-          OOMPY<span>°</span>
+        <a className="brand" href="#top" aria-label="Oompy Code Work home">
+          <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
+          <span>OOMPY / CODE WORK</span>
         </a>
 
-        <nav className={menuOpen ? "nav-links is-open" : "nav-links"} aria-label="Primary navigation">
+        <nav className={menuOpen ? "nav is-open" : "nav"} aria-label="Primary navigation">
           <a href="#work" onClick={() => setMenuOpen(false)}>Work</a>
-          <a href="#process" onClick={() => setMenuOpen(false)}>Process</a>
-          <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
+          <a href="#approach" onClick={() => setMenuOpen(false)}>Approach</a>
+          <a href="#notes" onClick={() => setMenuOpen(false)}>Notes</a>
         </nav>
+
+        <div className="header-status">
+          <span>TRACKSIDE UTILITY / 2026</span>
+          <span className="ready"><i /> SYSTEM READY</span>
+        </div>
 
         <button
           className="menu-button"
@@ -88,112 +122,185 @@ export default function Home() {
         </button>
       </header>
 
-      <section className="hero" id="top" aria-labelledby="hero-title">
+      <section className="hero" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <div className="eyebrow reveal-1">
-            <span className="status-dot" />
-            DIGITAL SYSTEMS / BRISBANE, AU
-          </div>
-          <h1 id="hero-title">
-            <span className="outline-word reveal-2">Work</span>
-            <span className="solid-word reveal-3">in motion.</span>
-          </h1>
-          <p className="hero-intro reveal-4">
-            I turn complex operations into focused digital products — designed to move data, people, and decisions forward.
+          <p className="issue-line reveal-one">01—02 / INDEPENDENT SYSTEM STUDY</p>
+          <p className="eyebrow reveal-one">
+            <span aria-hidden="true" />
+            HOBBY-BUILT SOFTWARE FOR MOTORCYCLE RACING
           </p>
+          <h1 id="hero-title">
+            <span className="reveal-two">Small tools.</span>
+            <span className="accent-line reveal-three"><em>Faster</em> race days.</span>
+          </h1>
+          <p className="hero-intro reveal-four">
+            AI-assisted software that removes the slow parts from Ridenet entry
+            processing and brings MYLAPS timing to local trackside screens.
+          </p>
+          <a className="primary-cta reveal-four" href="#work">
+            Explore the work <span aria-hidden="true">→</span>
+          </a>
         </div>
 
-        <div className="hero-scene" aria-hidden="true">
-          <div className="scene-glow" />
-          <div className="orbit orbit-a"><i /></div>
-          <div className="orbit orbit-b"><i /></div>
-          <div className="core-shape">
-            <div className="face face-front">BUILD</div>
-            <div className="face face-back">TEST</div>
-            <div className="face face-right">SHIP</div>
-            <div className="face face-left">LEARN</div>
-            <div className="face face-top" />
-            <div className="face face-bottom" />
+        <aside className="telemetry-panel" aria-label="Illustrative local race system status">
+          <div className="panel-frame">
+            <div className="panel-topline">
+              <span>LOCAL RACE SYSTEM / LIVE</span>
+              <SignalBars />
+            </div>
+
+            <div className="panel-main">
+              <div className="gauge">
+                <div className="gauge-face">
+                  <span className="gauge-needle" />
+                  <span className="gauge-pin" />
+                  <strong>FLOW</strong>
+                  <small>ACTIVE</small>
+                </div>
+              </div>
+
+              <dl className="panel-readout">
+                <div><dt>ENTRY PROCESS</dt><dd>READY</dd></div>
+                <div><dt>TIMING FEED</dt><dd>LOCAL</dd></div>
+                <div><dt>NETWORK</dt><dd>OFFLINE</dd></div>
+              </dl>
+            </div>
+
+            <div className="panel-chart" aria-hidden="true">
+              <i /><i /><i /><i /><i /><i /><i /><i />
+            </div>
+
+            <div className="panel-footer">
+              <span>RIDENET / PROCESS</span>
+              <span>MYLAPS / DISPLAY</span>
+              <span className="active">LOCAL-FIRST</span>
+            </div>
           </div>
-          <div className="float-label label-a">01 / SYSTEMS</div>
-          <div className="float-label label-b">02 / INTERFACES</div>
-          <div className="float-label label-c">03 / MOMENTUM</div>
-          <div className="scene-plane" />
-        </div>
-
-        <a className="scroll-cue" href="#work">
-          <span>SCROLL TO EXPLORE</span>
-          <i aria-hidden="true">↓</i>
-        </a>
+        </aside>
       </section>
 
-      <section className="manifesto" aria-label="What I do">
-        <p>STRATEGY <i>×</i> SYSTEMS <i>×</i> INTERACTION <i>×</i> MOTION</p>
-      </section>
+      <div className="programme-strip" aria-label="Project characteristics">
+        <span>SESSION / 01</span>
+        <span>MOTORCYCLE OPERATIONS SOFTWARE</span>
+        <span className="green">LOCAL / OFFLINE</span>
+        <span>DATA / FAST</span>
+        <span>RACE DAY / READY</span>
+      </div>
 
       <section className="work-section" id="work" aria-labelledby="work-title">
-        <div className="section-heading">
-          <p><span>SELECTED</span> / 2026</p>
-          <h2 id="work-title">Building useful things<br />for the real world.</h2>
-        </div>
+        <header className="section-intro">
+          <div>
+            <p className="section-kicker">SELECTED WORK / 2026</p>
+            <h2 id="work-title">Two problems,<br /><em>worked through.</em></h2>
+          </div>
+          <p>
+            Practical tools shaped around real trackside friction. Each project
+            keeps the workflow close, understandable and useful under race-day pressure.
+          </p>
+        </header>
 
-        <div className="project-list">
+        <div className="project-register">
           {projects.map((project) => (
-            <article className={`project-card ${project.tone}`} key={project.index} tabIndex={0}>
-              <div className="project-number">{project.index}</div>
-              <div className="project-visual" aria-hidden="true">
-                <div className="visual-grid" />
-                <div className="visual-object">
-                  <div className="object-ring ring-one" />
-                  <div className="object-ring ring-two" />
-                  <div className="object-sphere" />
-                </div>
-                <span>{project.label}</span>
-              </div>
-              <div className="project-content">
+            <article className={"project-card " + project.theme} key={project.number}>
+              <div className="project-number" aria-hidden="true">{project.number}</div>
+
+              <div className="project-copy">
                 <p className="project-label">{project.label}</p>
                 <h3>{project.title}</h3>
-                <p className="project-description">{project.copy}</p>
-                <div className="project-footer">
-                  <ul aria-label="Project themes">
-                    {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
-                  </ul>
-                  <span className="project-arrow"><Arrow /></span>
+                <p className="project-headline">{project.headline}</p>
+                <p className="project-description">{project.description}</p>
+                <ul>
+                  {project.points.map((point) => <li key={point}>{point}</li>)}
+                </ul>
+              </div>
+
+              <div className="project-console" aria-label={project.title + " workflow summary"}>
+                <div className="console-head">
+                  <span>{project.status}</span>
+                  <span className="console-light"><i /> LIVE</span>
                 </div>
+                <div className="console-grid">
+                  {project.signals.map(([label, value]) => (
+                    <div className="console-row" key={label}>
+                      <span>{label}</span>
+                      <strong>{value}</strong>
+                    </div>
+                  ))}
+                </div>
+                <div className="console-visual" aria-hidden="true">
+                  <span className="trace trace-one" />
+                  <span className="trace trace-two" />
+                  <span className="trace trace-three" />
+                  <span className="console-axis" />
+                </div>
+                <div className="console-meta">
+                  <span>MODE / UTILITY</span>
+                  <span>STATE / AVAILABLE</span>
+                </div>
+              </div>
+
+              <div className="project-flow">
+                {project.flow.map((step, index) => (
+                  <span key={step}>
+                    {step}
+                    {index < project.flow.length - 1 && <i aria-hidden="true" />}
+                  </span>
+                ))}
               </div>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="process-section" id="process" aria-labelledby="process-title">
-        <div className="process-orb" aria-hidden="true"><i /><i /><i /></div>
-        <div className="process-copy">
-          <p className="section-kicker">THE WAY THROUGH</p>
-          <h2 id="process-title">Find the signal.<br />Shape the system.<br /><em>Keep it moving.</em></h2>
+      <section className="approach-section" id="approach" aria-labelledby="approach-title">
+        <div className="approach-orbit" aria-hidden="true">
+          <i /><i /><i />
+          <span>LOCAL</span>
+        </div>
+
+        <div className="approach-copy">
+          <p className="section-kicker">WHY THESE EXIST</p>
+          <h2 id="approach-title">Built from problems<br />experienced <em>at the circuit.</em></h2>
           <p>
-            The work starts by making the real problem visible. From there, I prototype the smallest useful path, test it against reality, and evolve it without losing clarity.
+            These are independent, problem-led experiments by a hobby AI-assisted
+            coder. AI helps explore and test ideas; the aim is simply to remove
+            avoidable work and make race days easier.
           </p>
         </div>
-        <ol className="process-steps">
-          <li><span>01</span><strong>MAP</strong><p>Understand the pressure, the people, and the moving parts.</p></li>
-          <li><span>02</span><strong>MAKE</strong><p>Turn the best idea into something real enough to challenge.</p></li>
-          <li><span>03</span><strong>MOVE</strong><p>Ship, learn, refine — without burying the product in process.</p></li>
+
+        <ol className="approach-steps">
+          <li><span>01</span><strong>EXPERIENCE</strong><p>Notice the repeated task or trackside limitation.</p></li>
+          <li><span>02</span><strong>SIMPLIFY</strong><p>Build the smallest useful local workflow around it.</p></li>
+          <li><span>03</span><strong>REFINE</strong><p>Use it in context, learn, and improve the practical details.</p></li>
         </ol>
       </section>
 
-      <footer id="contact">
-        <div className="footer-kicker"><span className="status-dot" /> AVAILABLE FOR THE NEXT GOOD PROBLEM</div>
-        <h2>Let&apos;s make it<br /><span>move.</span></h2>
-        <a className="contact-link" href="mailto:hello@oompy.dev">
-          hello@oompy.dev <Arrow />
-        </a>
-        <div className="footer-meta">
-          <p>BRISBANE / AUSTRALIA</p>
-          <p>DESIGNED IN MOTION</p>
-          <p>© 2026 OOMPY</p>
+      <section className="notes-section" id="notes" aria-labelledby="notes-title">
+        <p className="section-kicker">PUBLIC PROJECT NOTES</p>
+        <h2 id="notes-title">The work is the story.<br />Private data is not.</h2>
+        <div className="notes-grid">
+          <p>No customer information is shown or used to demonstrate these projects.</p>
+          <p>No personal profile is required—the focus stays on the problems and the tools.</p>
+          <p>Ridenet and MYLAPS are named only because the projects address workflows around those systems.</p>
         </div>
-        <div className="footer-orbit" aria-hidden="true" />
+      </section>
+
+      <footer>
+        <a className="footer-brand" href="#top">
+          <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
+          OOMPY / CODE WORK
+        </a>
+        <p>SMALL TOOLS <i>/</i> FASTER RACE DAYS</p>
+        <div className="footer-meta">
+          <span>INDEPENDENT</span>
+          <span>AI-ASSISTED</span>
+          <span>PROBLEM-LED</span>
+          <span>2026</span>
+        </div>
+        <small>
+          Independent hobby projects. Ridenet and MYLAPS are referenced solely
+          to describe the workflows these tools are designed around.
+        </small>
       </footer>
     </main>
   );
