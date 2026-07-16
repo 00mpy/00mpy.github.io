@@ -58,6 +58,17 @@ function SignalBars() {
   );
 }
 
+function TraceRow({ label, tone }: { label: string; tone: string }) {
+  return (
+    <div className={"telemetry-trace " + tone} aria-hidden="true">
+      <span className="trace-badge">{label}</span>
+      <span className="wave-line">
+        <i />
+      </span>
+    </div>
+  );
+}
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -93,90 +104,96 @@ export default function Home() {
         aria-hidden="true"
       />
 
-      <header className="site-header">
-        <a className="brand" href="#top" aria-label="Oompy Code Work home">
-          <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
-          <span>OOMPY / CODE WORK</span>
-        </a>
-
-        <nav className={menuOpen ? "nav is-open" : "nav"} aria-label="Primary navigation">
-          <a href="#work" onClick={() => setMenuOpen(false)}>Work</a>
-          <a href="#approach" onClick={() => setMenuOpen(false)}>Approach</a>
-          <a href="#notes" onClick={() => setMenuOpen(false)}>Notes</a>
-        </nav>
-
-        <div className="header-status">
-          <span>TRACKSIDE UTILITY / 2026</span>
-          <span className="ready"><i /> SYSTEM READY</span>
-        </div>
-
-        <button
-          className="menu-button"
-          type="button"
-          aria-label="Toggle navigation"
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <span />
-          <span />
-        </button>
-      </header>
-
       <section className="hero" aria-labelledby="hero-title">
-        <div className="hero-copy">
-          <p className="issue-line reveal-one">01—02 / INDEPENDENT SYSTEM STUDY</p>
-          <p className="eyebrow reveal-one">
-            <span aria-hidden="true" />
-            HOBBY-BUILT SOFTWARE FOR MOTORCYCLE RACING
-          </p>
-          <h1 id="hero-title">
-            <span className="reveal-two">Small tools.</span>
-            <span className="accent-line reveal-three"><em>Faster</em> race days.</span>
-          </h1>
-          <p className="hero-intro reveal-four">
-            AI-assisted software that removes the slow parts from Ridenet entry
-            processing and brings MYLAPS timing to local trackside screens.
-          </p>
-          <a className="primary-cta reveal-four" href="#work">
-            Explore the work <span aria-hidden="true">→</span>
-          </a>
-        </div>
+        <div className="hero-frame">
+          <div className="hero-editorial">
+            <header className="hero-masthead">
+              <a className="brand" href="#top" aria-label="Oompy Code Work home">
+                <span>OOMPY / CODE WORK</span>
+                <span className="brand-ticks" aria-hidden="true"><i /><i /><i /><i /></span>
+              </a>
 
-        <aside className="telemetry-panel" aria-label="Illustrative local race system status">
-          <div className="panel-frame">
-            <div className="panel-topline">
-              <span>LOCAL RACE SYSTEM / LIVE</span>
-              <SignalBars />
+              <nav className={menuOpen ? "nav is-open" : "nav"} aria-label="Primary navigation">
+                <a href="#work" onClick={() => setMenuOpen(false)}>Work</a>
+                <a href="#approach" onClick={() => setMenuOpen(false)}>Approach</a>
+                <a href="#notes" onClick={() => setMenuOpen(false)}>Notes</a>
+              </nav>
+
+              <button
+                className="menu-button"
+                type="button"
+                aria-label="Toggle navigation"
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((open) => !open)}
+              >
+                <span />
+                <span />
+              </button>
+            </header>
+
+            <div className="hero-copy">
+              <p className="hero-context reveal-one">
+                INDEPENDENT / MOTORCYCLE OPERATIONS SOFTWARE
+              </p>
+              <h1 id="hero-title">
+                <span className="reveal-two">Small tools.</span>
+                <span className="accent-line reveal-three">Faster race days.</span>
+              </h1>
             </div>
 
-            <div className="panel-main">
-              <div className="gauge">
-                <div className="gauge-face">
-                  <span className="gauge-needle" />
-                  <span className="gauge-pin" />
-                  <strong>FLOW</strong>
-                  <small>ACTIVE</small>
+            <a className="hero-project-line reveal-four" href="#work">
+              <span>RIDENET DATA PROCESSOR · MYLAPS LOCAL TIMING</span>
+              <i aria-hidden="true">↓</i>
+            </a>
+
+            <span className="registration-mark mark-top" aria-hidden="true" />
+            <span className="registration-mark mark-bottom" aria-hidden="true" />
+          </div>
+
+          <aside className="telemetry-panel" aria-label="Illustrative local race system status">
+            <div className="panel-frame">
+              <div className="panel-topline">
+                <span>TRACKSIDE SYSTEM / LOCAL</span>
+                <SignalBars />
+              </div>
+
+              <div className="tachometer" aria-hidden="true">
+                <div className="tach-arc" />
+                <span className="tach-number n-zero">0</span>
+                <span className="tach-number n-four">4</span>
+                <span className="tach-number n-eight">8</span>
+                <span className="tach-number n-twelve">12</span>
+                <span className="tach-number n-sixteen">16</span>
+                <span className="tach-needle" />
+                <span className="tach-pin" />
+              </div>
+
+              <div className="status-lights" aria-hidden="true">
+                <i /><i /><i /><i /><i />
+              </div>
+
+              <div className="trace-stack">
+                <TraceRow label="T" tone="trace-a" />
+                <TraceRow label="↗" tone="trace-b" />
+                <TraceRow label="G" tone="trace-c" />
+              </div>
+
+              <div className="histogram" aria-hidden="true">
+                <span className="trace-badge">▤</span>
+                <div>
+                  <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
+                  <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
                 </div>
               </div>
 
-              <dl className="panel-readout">
-                <div><dt>ENTRY PROCESS</dt><dd>READY</dd></div>
-                <div><dt>TIMING FEED</dt><dd>LOCAL</dd></div>
-                <div><dt>NETWORK</dt><dd>OFFLINE</dd></div>
-              </dl>
+              <div className="panel-footer">
+                <span>PROCESS / READY</span>
+                <span>DISPLAY / LOCAL</span>
+                <span className="active">NETWORK / INDEPENDENT</span>
+              </div>
             </div>
-
-            <div className="panel-chart" aria-hidden="true">
-              <i /><i /><i /><i /><i /><i /><i /><i />
-            </div>
-
-            <div className="panel-footer">
-              <span>RIDENET / PROCESS</span>
-              <span>MYLAPS / DISPLAY</span>
-              <span className="active">LOCAL-FIRST</span>
-            </div>
-          </div>
-        </aside>
+          </aside>
+        </div>
       </section>
 
       <div className="programme-strip" aria-label="Project characteristics">
