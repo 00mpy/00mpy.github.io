@@ -1,0 +1,154 @@
+<html>
+
+<head>
+  <title>Results of Ricondi / Race and Road SDRRC Round 1 & ARRSC Championship Round 3 at Queensland Raceway</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    table {
+      width: 100%;
+      max-width: 1000px;
+      margin: 20px auto;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background-color: #b49859;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #ddd;
+    }
+
+    .headerbig {
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      background-color: #b49859;
+      color: white;
+      text-align: center;
+    }
+
+    .headersmall {
+      padding: 50px 0px 0px 0px;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      color: #333;
+    }
+
+    .col16 {
+      width: 16%;
+    }
+
+    .col8 {
+      width: 8%;
+    }
+
+    .name-column {
+      text-align: left;
+    }
+
+    @media (max-width: 768px) {
+
+      table,
+      th,
+      td {
+        font-size: 12px;
+      }
+
+      .headerbig {
+        font-size: 20px;
+      }
+
+      .headersmall {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="headerbig">Ricondi/Race and Road SDRRC Round 1 &amp; ARRSC Championshipoints R3 at Queensland Raceway</div>
+  <div class="headerbottom" />
+<script>
+    async function loadCSVData() {
+        const response = await fetch('SDRRCRnd1-Points.csv'); // Ensure the CSV file is in the same folder as this HTML file
+        const csvText = await response.text();
+        const rows = csvText.split('\n').map(row => row.split(','));
+
+        const tableContainer = document.getElementById('table-container');
+        let currentCategory = '';
+        let tableHTML = '';
+
+        rows.forEach((row, index) => {
+            if (index === 0) return; // Skip header row
+
+            if (row[0] && row[0] !== currentCategory) {
+                if (tableHTML) {
+                    tableHTML += '</table>';
+                }
+                currentCategory = row[0];
+                tableHTML += `<h2 class="headersmall">${currentCategory}</h2>`;
+                tableHTML += `
+                    <table class="points" cellspacing="0 px">
+                        <tr class="header">
+                            <th class="col8">Pos</th>
+                            <th class="col8">No.</th>
+                            <th class="name-column">Name</th>
+                            <th class="col16">Total points</th>
+                            <th class="col8">Leg 1</th>
+                            <th class="col8">Leg 2</th>
+                            <th class="col8">Leg 3</th>
+                            <th class="col8">Leg 4</th>
+                        </tr>
+                `;
+            }
+
+            tableHTML += `
+                <tr>
+                    <td>${row[1]}</td>
+                    <td>${row[2]}</td>
+                    <td class="name-column">${row[3]}</td>
+                    <td>${row[4]}</td>
+                    <td>${row[5]}</td>
+                    <td>${row[6]}</td>
+                    <td>${row[7]}</td>
+                    <td>${row[8]}</td>
+                </tr>
+            `;
+        });
+
+        if (tableHTML) {
+            tableHTML += '</table>';
+        }
+
+        tableContainer.innerHTML = tableHTML;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadCSVData);
+</script>
+
+<div id="table-container"></div>
+</body>
+
+</html>
